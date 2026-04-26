@@ -1,18 +1,29 @@
-name: Sync to Hugging Face hub
+name: Sync to Hugging Face
+
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
   sync-to-hub:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
-      - name: Push to hub
+
+      - name: Install Git LFS
+        run: git lfs install
+
+      - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://Ashwani2267:$HF_TOKEN@huggingface.co/spaces/Ashwani2267/Search_Engine_LLM main
+        run: |
+          git config --global user.email "raju417266@gmail.com"
+          git config --global user.name "Raju215"
+
+          git remote add hf https://Ashwani2267:$HF_TOKEN@huggingface.co/spaces/Ashwani2267/Search_Engine_LLM
+
+          git push hf main --force
